@@ -4,10 +4,15 @@
   ],
   "filters": {},
   "rules": {
+    "@textlint-ja/no-synonyms": true,
     "prh": {
       "rulePaths": [
         "./prh.yml"
       ]
+    },
+    "eslint": {
+      "severity" : "warning",
+      "configFile": "./markdown.eslintrc.js"
     }
   }
 }

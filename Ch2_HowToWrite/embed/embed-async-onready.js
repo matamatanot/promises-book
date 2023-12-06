@@ -1,12 +1,12 @@
 function onReady(fn) {
-    var readyState = document.readyState;
-    if (readyState === 'interactive' || readyState === 'complete') {
+    const readyState = document.readyState;
+    if (readyState === "interactive" || readyState === "complete") {
         setTimeout(fn, 0);
     } else {
-        window.addEventListener('DOMContentLoaded', fn);
+        window.addEventListener("DOMContentLoaded", fn);
     }
 }
-onReady(function () {
-    console.log('DOM fully loaded and parsed');
+onReady(() => {
+    console.log("DOM fully loaded and parsed");
 });
-console.log('==Starting==');
+console.log("==Starting==");

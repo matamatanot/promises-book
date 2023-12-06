@@ -1,12 +1,12 @@
 [[basic-tests]]
 == 基本的なテスト
 
-<<es6-promises,ES6 Promises>>のメソッド等についてひととおり学ぶことができたため、
+<<es-promises,ES Promises>>のメソッド等についてひととおり学ぶことができたため、
 実際にPromiseを使った処理を書いていくことはできると思います。
 
 そうした時に、次にどうすればいいのか悩むのがPromiseのテストの書き方です。
 
-ここではまず、 http://mochajs.org/[Mocha]を使った基本的なPromiseのテストの書き方について学んでいきましょう。
+ここではまず、 https://mochajs.org/[Mocha]を使った基本的なPromiseのテストの書き方について学んでいきましょう。
 
 また、この章でのテストコードはNode.js環境で実行することを前提としているため、
 各自Node.js環境を用意してください。
@@ -17,7 +17,7 @@
 
 === Mochaとは
 
-Mochaの公式サイト: http://mochajs.org/[http://mochajs.org/]
+Mochaの公式サイト: https://mochajs.org/[https://mochajs.org/]
 
 ここでは、 Mocha自体については詳しく解説しませんが、
 MochaはNode.js製のテストフレームワークツールです。
@@ -70,9 +70,9 @@ Mochaでの非同期テストは以下のような流れで実行されます。
 [source,javascript]
 [[callback-style-test]]
 ----
-it("should use `done` for test", function (done) {
+it("should use `done` for test", (done) => {
     // <1>
-    setTimeout(function () {
+    setTimeout(() => {
         assert(true);
         done();// <2>
     }, 0);
@@ -90,9 +90,9 @@ it("should use `done` for test", function (done) {
 
 [source,javascript]
 ----
-it("should use `done` for test?", function (done) {
-    var promise = Promise.resolve(42);// <1>
-    promise.then(function (value) {
+it("should use `done` for test?", (done) => {
+    const promise = Promise.resolve(42);// <1>
+    promise.then((value) => {
         assert(value === 42);
         done();// <2>
     });
@@ -103,7 +103,7 @@ it("should use `done` for test?", function (done) {
 
 
 <<Promise.resolve, `Promise.resolve`>> はpromiseオブジェクトを返しますが、
-そのpromiseオブジェクトはFulFilledの状態になります。
+そのpromiseオブジェクトはFulfilledの状態になります。
 その結果として `.then` で登録したコールバック関数が呼び出されます。
 
 <<promise-is-always-async,コラム: Promiseは常に非同期?>> でも出てきたように、
@@ -115,9 +115,9 @@ promiseオブジェクトは常に非同期で処理されるため、テスト�
 [[promise-assert-fail]]
 .意図しない結果となるPromiseのテスト
 ----
-it("should use `done` for test?", function (done) {
-    var promise = Promise.resolve();
-    promise.then(function (value) {
+it("should use `done` for test?", (done) => {
+    const promise = Promise.resolve();
+    promise.then((value) => {
         assert(false);// => throw AssertionError
         done();
     });
@@ -143,9 +143,9 @@ Promiseがそれをキャッチしてしまい、テストフレームワーク�
 [[promise-assert-fail-fixed]]
 .意図通りにテストが失敗する例
 ----
-it("should use `done` for test?", function (done) {
-    var promise = Promise.resolve();
-    promise.then(function (value) {
+it("should use `done` for test?", (done) => {
+    const promise = Promise.resolve();
+    promise.then((value) => {
         assert(false);
     }).then(done, done);
 });

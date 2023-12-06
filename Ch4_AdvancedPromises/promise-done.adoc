@@ -7,7 +7,7 @@
 それらのライブラリでは `Promise.prototype.done` というような実装が存在し、
 使い方は `then` と同じですが、promiseオブジェクトを返さないようになっています。
 
-`Promise.prototype.done` は、<<es6-promises,ES6 Promises>>や<<promises-aplus,Promises/A+>>の仕様には
+`Promise.prototype.done` は、<<es-promises,ES Promises>>や<<promises-aplus,Promises/A+>>の仕様には
 存在していない記述ですが、多くのライブラリが実装しています。
 
 このセクションでは、`Promise.prototype.done` とは何か?
@@ -35,10 +35,10 @@ include::embed/embed-promise-done-example.js[]
 [source,javascript]
 .thenを使った場合
 ----
-var promise = Promise.resolve();
-promise.then(function () {
+const promise = Promise.resolve();
+promise.then(() => {
     JSON.parse("this is not json");
-}).catch(function (error) {
+}).catch((error) => {
     console.error(error);// => "SyntaxError: JSON.parse"
 });
 ----
@@ -90,7 +90,7 @@ include::embed/embed-json-promise.js[]
 var string = "jsonではない文字列";
 JSONPromise(string).then(function (object) {
     console.log(object);
-}).catch(function(error){
+}).catch((error) => {
     // => JSON.parseで例外が発生した時
     console.error(error);
 });
@@ -102,8 +102,8 @@ JSONPromise(string).then(function (object) {
 [source,javascript]
 .catchによるエラーハンドリングを忘れてしまった場合
 ----
-var string = "jsonではない文字列";
-JSONPromise(string).then(function (object) {
+const string = "jsonではない文字列";
+JSONPromise(string).then((object) => {
     console.log(object);
 }); // <1>
 ----
@@ -115,8 +115,8 @@ JSONPromise(string).then(function (object) {
 [source,javascript]
 .typoによるエラー
 ----
-var string = "{}";
-JSONPromise(string).then(function (object) {
+const string = "{}";
+JSONPromise(string).then((object) => {
     conosle.log(object);// <1>
 });
 ----
@@ -171,11 +171,11 @@ setTimeoutの中でthrowをすることで、外へそのまま例外を投げ�
 [source,javascript]
 .setTimeoutのコールバック内での例外
 ----
-try{
-    setTimeout(function callback() {
+try {
+    setTimeout(() => {
         throw new Error("error");// <1>
     }, 0);
-}catch(error){
+} catch (error) {
     console.error(error);
 }
 ----
@@ -193,7 +193,7 @@ try{
 
 現在では多くの実行環境で、__unhandled rejection__を検知してコンソールに警告を表示するため、`done` が必要な場合は少なくなっています。
 また今回の<<promise-prototype-done.js,`Promise.prototype.done`>>のように、`done` は既存のPromiseの上に実装することができるため、
-<<es6-promises,ES6 Promises>>の仕様そのものには入らなかったといえるかもしれません。
+<<es-promises,ES Promises>>の仕様そのものには入らなかったといえるかもしれません。
 
 [NOTE]
 今回の `Promise.prototype.done` の実装は https://www.promisejs.org/[promisejs.org] を参考にしています。
@@ -214,7 +214,7 @@ try{
 また、`done` は値を返さないことでそれ以上Promise chainを繋げることができなくなるため、
 そのような統一感を持たせるという用途で `done` を使うこともできます。
 
-<<es6-promises,ES6 Promises>> では根本に用意されてる機能はあまり多くありません。
+<<es-promises,ES Promises>> では根本に用意されてる機能はあまり多くありません。
 そのため、自ら拡張したり、拡張したライブラリ等を利用するケースが多いと思います。
 
 そのときでも何でもやり過ぎると、せっかく非同期処理をPromiseでまとめても複雑化してしまう場合があるため、

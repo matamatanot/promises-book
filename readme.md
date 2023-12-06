@@ -1,12 +1,19 @@
-# Promises Book [![Build Status](https://travis-ci.org/azu/promises-book.svg)](https://travis-ci.org/azu/promises-book) [![Gitter chat](https://badges.gitter.im/azu/promises-book.png)](https://gitter.im/azu/promises-book)
+# Promises Book [![test](https://github.com/azu/promises-book/actions/workflows/test.yml/badge.svg)](https://github.com/azu/promises-book/actions/workflows/test.yml) [![Gitter chat](https://badges.gitter.im/azu/promises-book.png)](https://gitter.im/azu/promises-book)
 
 JavaScript Promiseについての薄い電子書籍です。
 
-- ウェブ版: [http://azu.github.io/promises-book/](http://azu.github.io/promises-book/ "Promises book")
-- PDF版: [http://azu.github.io/promises-book/javascript-promise-book.pdf](http://azu.github.io/promises-book/javascript-promise-book.pdf)
+- ウェブ版: [https://azu.github.io/promises-book/](https://azu.github.io/promises-book/ "Promises book")
+- PDF版: [https://azu.github.io/promises-book/javascript-promise-book.pdf](https://azu.github.io/promises-book/javascript-promise-book.pdf)
 - おまけ(付録): [https://gumroad.com/l/javascript-promise](https://gumroad.com/l/javascript-promise "JavaScript Promiseの本 付録")
 
-寄付などがしたい方は、[付録を任意の値段で購入できる](https://gumroad.com/l/javascript-promise "JavaScript Promiseの本 付録")のでこちらを代用して下さい。
+作者をサポートしたい場合は、次の手段が利用できます。
+
+- GitHub Sponsorsで[作者に対してmonthly/onetimeで支援](https://github.com/sponsors/azu)できます
+- Gumroadで[付録を任意の値段で購入](https://gumroad.com/l/javascript-promise "JavaScript Promiseの本 付録")できます。
+
+過去のバージョンについては次のページから参照できます。
+
+- [JavaScript Promiseの本(v1)](https://azu.github.io/promises-book/archives/v1/)
 
 This book has been released in :
 
@@ -17,7 +24,7 @@ This book has been released in :
 
 この書籍はAsciidocフォーマットで書かれています。
 
-[Asciidoctor](http://asciidoctor.org/ "Asciidoctor")でビルドすることができます。
+[Asciidoctor](https://asciidoctor.org/ "Asciidoctor")でビルドすることができます。
 
 ### HTMLのビルド
 
@@ -46,7 +53,7 @@ open javascript-promise-book.pdf
 ### Epubのビルド
 
 まだ完成度が高くないため品質はよくありません。
-[HTML版](http://azu.github.io/promises-book/)はスマートフォン等画面が小さくても見られるようになっているためそちらの利用を推奨します。
+[HTML版](https://azu.github.io/promises-book/)はスマートフォン等画面が小さくても見られるようになっているためそちらの利用を推奨します。
 
 ``` sh
 gem install specific_install
@@ -72,6 +79,6 @@ Pull Requestする場合は [CONTRIBUTING.md](CONTRIBUTING.md "CONTRIBUTING.md")
 
 プログラムコードはMITライセンスで利用できます。
 
-文章については<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial</a>で利用できます。
+文章については<a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial</a>で利用できます。
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a>

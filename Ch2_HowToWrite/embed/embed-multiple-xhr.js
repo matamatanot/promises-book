@@ -1,34 +1,40 @@
-function getURL(URL) {
-    return new Promise(function (resolve, reject) {
-        var req = new XMLHttpRequest();
-        req.open('GET', URL, true);
-        req.onload = function () {
-            if (req.status === 200) {
+function fetchURL(URL) {
+    return new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest();
+        req.open("GET", URL, true);
+        req.onload = () => {
+            if (200 <= req.status && req.status < 300) {
                 resolve(req.responseText);
             } else {
                 reject(new Error(req.statusText));
             }
         };
-        req.onerror = function () {
+        req.onerror = () => {
             reject(new Error(req.statusText));
         };
         req.send();
     });
 }
-var request = {
-        comment: function getComment() {
-            return getURL('http://azu.github.io/promises-book/json/comment.json').then(JSON.parse);
-        },
-        people: function getPeople() {
-            return getURL('http://azu.github.io/promises-book/json/people.json').then(JSON.parse);
-        }
-    };
+const request = {
+    comment() {
+        return fetchURL("https://azu.github.io/promises-book/json/comment.json").then(JSON.parse);
+    },
+    people() {
+        return fetchURL("https://azu.github.io/promises-book/json/people.json").then(JSON.parse);
+    }
+};
 function main() {
     function recordValue(results, value) {
         results.push(value);
         return results;
     }
     // [] は記録する初期値を部分適用している
-    var pushValue = recordValue.bind(null, []);
-    return request.comment().then(pushValue).then(request.people).then(pushValue);
+    const pushValue = recordValue.bind(null, []);
+    return request.comment()
+        .then(pushValue)
+        .then(request.people)
+        .then(pushValue);
 }
+
+
+

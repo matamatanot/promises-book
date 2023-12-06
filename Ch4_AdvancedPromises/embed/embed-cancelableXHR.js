@@ -1,40 +1,41 @@
-var requestMap = {};
+const requestMap = {};
 function createXHRPromise(URL) {
-    var req = new XMLHttpRequest();
-    var promise = new Promise(function (resolve, reject) {
-            req.open('GET', URL, true);
-            req.onreadystatechange = function () {
-                if (req.readyState === XMLHttpRequest.DONE) {
-                    delete requestMap[URL];
-                }
-            };
-            req.onload = function () {
-                if (req.status === 200) {
-                    resolve(req.responseText);
-                } else {
-                    reject(new Error(req.statusText));
-                }
-            };
-            req.onerror = function () {
+    const req = new XMLHttpRequest();
+    const promise = new Promise((resolve, reject) => {
+        req.open("GET", URL, true);
+        req.onreadystatechange = function() {
+            if (req.readyState === XMLHttpRequest.DONE) {
+                delete requestMap[URL];
+            }
+        };
+        req.onload = () => {
+            if (200 <= req.status && req.status < 300) {
+                resolve(req.responseText);
+            } else {
                 reject(new Error(req.statusText));
-            };
-            req.onabort = function () {
-                reject(new Error('abort this req'));
-            };
-            req.send();
-        });
+            }
+        };
+        req.onerror = () => {
+            reject(new Error(req.statusText));
+        };
+        req.onabort = () => {
+            reject(new Error("abort this req"));
+        };
+        req.send();
+    });
     requestMap[URL] = {
         promise: promise,
         request: req
     };
     return promise;
 }
+
 function abortPromise(promise) {
-    if (typeof promise === 'undefined') {
+    if (typeof promise === "undefined") {
         return;
     }
-    var request;
-    Object.keys(requestMap).some(function (URL) {
+    let request;
+    Object.keys(requestMap).some((URL) => {
         if (requestMap[URL].promise === promise) {
             request = requestMap[URL].request;
             return true;
@@ -44,3 +45,5 @@ function abortPromise(promise) {
         request.abort();
     }
 }
+
+

@@ -3,7 +3,7 @@
 
 Mochaがサポートしてる"Promiseのテスト"とは何かについて学んでいきましょう。
 
-公式サイトの http://mochajs.org/#asynchronous-code[Asynchronous code]にもその概要が書かれています。
+公式サイトの https://mochajs.org/#asynchronous-code[Asynchronous code]にもその概要が書かれています。
 
 > Alternately, instead of using the done() callback, you can return a promise. This is useful if the APIs you are testing return promises instead of taking callbacks:
 
@@ -30,8 +30,8 @@ include::embed/embed-mocha-promise-test.js[]
 
 [source,javascript]
 ----
-it("should be fail", function () {
-    return Promise.resolve().then(function () {
+it("should be fail", () => {
+    return Promise.resolve().then(() => {
         assert(false);// => テストが失敗する
     });
 });
@@ -56,11 +56,11 @@ MochaがPromiseのテストをサポートしているため、この書き方�
 [[mocha-rejected-promise-test]]
 .エラーオブジェクトをテストしたい
 ----
-function mayBeRejected(){ // <1>
+function mayBeRejected() { // <1>
     return Promise.reject(new Error("woo"));
 }
-it("is bad pattern", function () {
-    return mayBeRejected().catch(function (error) {
+it("is bad pattern", () => {
+    return mayBeRejected().catch((error) => {
         assert(error.message === "woo");
     });
 });
@@ -70,7 +70,7 @@ it("is bad pattern", function () {
 
 このテストの目的とは以下のようになっています。
 
-`mayBeRejected()` が返すpromiseオブジェクトがFulFilledとなった場合::
+`mayBeRejected()` が返すpromiseオブジェクトがFulfilledとなった場合::
     テストを失敗させる
 `mayBeRejected()` が返すpromiseオブジェクトがRejectedとなった場合::
     `assert` でErrorオブジェクトをチェックする
@@ -79,20 +79,20 @@ it("is bad pattern", function () {
 上記のテストコードでは、Rejectedとなって `onRejected` に登録された関数が呼ばれるためテストはパスしますね。
 
 このテストで問題になるのは `mayBeRejected()` で返されたpromiseオブジェクトが
-**FulFilledとなった場合**に、必ずテストがパスしてしまうという問題が発生します。
+**Fulfilledとなった場合**に、必ずテストがパスしてしまうという問題が発生します。
 
 [source,javascript]
 ----
-function mayBeRejected(){ // <1>
+function mayBeRejected() { // <1>
     return Promise.resolve();
 }
-it("is bad pattern", function () {
-    return mayBeRejected().catch(function (error) {
+it("is bad pattern", () => {
+    return mayBeRejected().catch((error) => {
         assert(error.message === "woo");
     });
 });
 ----
-<1> 返されるpromiseオブジェクトはFulFilledとなる
+<1> 返されるpromiseオブジェクトはFulfilledとなる
 
 この場合、`catch` で登録した `onRejected` の関数はそもそも呼ばれないため、
 `assert` がひとつも呼ばれることなくテストが必ずパスしてしまいます。
@@ -105,11 +105,11 @@ it("is bad pattern", function () {
 function failTest() { // <1>
     throw new Error("Expected promise to be rejected but it was fulfilled");
 }
-function mayBeRejected(){
+function mayBeRejected() {
     return Promise.resolve();
 }
-it("should bad pattern", function () {
-    return mayBeRejected().then(failTest).catch(function (error) {
+it("should bad pattern", () => {
+    return mayBeRejected().then(failTest).catch((error) => {
         assert(error.message === "woo");
     });
 });
@@ -135,7 +135,7 @@ image::../Ch2_HowToWrite/img/then_catch.png[Then Catch flow]
 
 一番単純な方法としては、以下のようにそれぞれの状態の場合にどうなるのかをテストコードに書く方法です。
 
-FulFilledとなった場合::
+Fulfilledとなった場合::
     意図したとおりテストが失敗する
 Rejectedとなった場合::
     `assert` でテストを行える
@@ -147,15 +147,15 @@ Rejectedとなった場合::
 function mayBeRejected() {
     return Promise.resolve();
 }
-it("catch -> then", function () {
-    // FulFilledとなった場合はテストは失敗する
-    return mayBeRejected().then(failTest, function (error) {
+it("catch -> then", () => {
+    // Fulfilledとなった場合はテストは失敗する
+    return mayBeRejected().then(failTest, (error) => {
         assert(error.message === "woo");
     });
 });
 ----
 
-このように書くことで、FulFilledとなった場合は失敗するテストコードを書くことができます。
+このように書くことで、Fulfilledとなった場合は失敗するテストコードを書くことができます。
 
 .Promise onRejected test
 image::img/promise-test.png[Promise onRejected test]
@@ -184,7 +184,7 @@ promiseオブジェクトがFulfilled、Rejectedどちらの状態になるか�
 
 [source,javascript]
 ----
-promise.then(failTest, function(error){
+promise.then(failTest, (error) => {
     // assertでerrorをテストする
 });
 ----

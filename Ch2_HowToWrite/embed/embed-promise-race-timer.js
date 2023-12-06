@@ -1,7 +1,7 @@
 // `delay`ミリ秒後にresolveする
 function timerPromisefy(delay) {
-    return new Promise(function (resolve) {
-        setTimeout(function () {
+    return new Promise((resolve) => {
+        setTimeout(() => {
             resolve(delay);
         }, delay);
     });
@@ -12,6 +12,8 @@ Promise.race([
     timerPromisefy(32),
     timerPromisefy(64),
     timerPromisefy(128)
-]).then(function (value) {
-    console.log(value);    // => 1
+]).then((value) => {
+    console.log(value); // => 1
 });
+
+

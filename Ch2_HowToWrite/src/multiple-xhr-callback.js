@@ -1,15 +1,15 @@
 "use strict";
-function getURLCallback(URL, callback) {
-    var req = new XMLHttpRequest();
-    req.open('GET', URL, true);
-    req.onload = function () {
-        if (req.status === 200) {
+function fetchURLCallback(URL, callback) {
+    const req = new XMLHttpRequest();
+    req.open("GET", URL, true);
+    req.onload = () => {
+        if (200 <= req.status && req.status < 300) {
             callback(null, req.responseText);
         } else {
             callback(new Error(req.statusText), req.response);
         }
     };
-    req.onerror = function () {
+    req.onerror = () => {
         callback(new Error(req.statusText));
     };
     req.send();
@@ -20,7 +20,7 @@ function jsonParse(callback, error, value) {
         callback(error, value);
     } else {
         try {
-            var result = JSON.parse(value);
+            const result = JSON.parse(value);
             callback(null, result);
         } catch (e) {
             callback(e, value);
@@ -28,12 +28,12 @@ function jsonParse(callback, error, value) {
     }
 }
 // <2> XHRを叩いてリクエスト
-var request = {
-    comment: function getComment(callback) {
-        return getURLCallback('http://azu.github.io/promises-book/json/comment.json', jsonParse.bind(null, callback));
+const request = {
+    comment(callback) {
+        return fetchURLCallback("https://azu.github.io/promises-book/json/comment.json", jsonParse.bind(null, callback));
     },
-    people: function getPeople(callback) {
-        return getURLCallback('http://azu.github.io/promises-book/json/people.json', jsonParse.bind(null, callback));
+    people(callback) {
+        return fetchURLCallback("https://azu.github.io/promises-book/json/people.json", jsonParse.bind(null, callback));
     }
 };
 // <3> 複数のXHRリクエストを行い、全部終わったらcallbackを呼ぶ
@@ -41,8 +41,8 @@ function allRequest(requests, callback, results) {
     if (requests.length === 0) {
         return callback(null, results);
     }
-    var req = requests.shift();
-    req(function (error, value) {
+    const req = requests.shift();
+    req((error, value) => {
         if (error) {
             callback(error, value);
         } else {

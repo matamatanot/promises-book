@@ -1,29 +1,38 @@
-function Deferred() {
-    this.promise = new Promise(function (resolve, reject) {
-        this._resolve = resolve;
-        this._reject = reject;
-    }.bind(this));
+
+class Deferred {
+    constructor() {
+        this.promise = new Promise((resolve, reject) => {
+            // Arrow Functionを利用しているため、`this`がDeferredのインスタンスを参照する
+            this._resolve = resolve;
+            this._reject = reject;
+        });
+    }
+
+    // Deferred#resolveメソッドは、`value`でPromiseインスタンスをresolveする
+    resolve(value) {
+        this._resolve(value);
+    }
+
+    // Deferred#rejectメソッドは、`reason`でPromiseインスタンスをrejectする
+    reject(reason) {
+        this._reject(reason);
+    }
 }
-Deferred.prototype.resolve = function (value) {
-    this._resolve(value);
-};
-Deferred.prototype.reject = function (reason) {
-    this._reject(reason);
-};
-function getURL(URL) {
-    var deferred = new Deferred();
-    var req = new XMLHttpRequest();
-    req.open('GET', URL, true);
-    req.onload = function () {
-        if (req.status === 200) {
+function fetchURL(URL) {
+    const deferred = new Deferred();
+    const req = new XMLHttpRequest();
+    req.open("GET", URL, true);
+    req.onload = () => {
+        if (200 <= req.status && req.status < 300) {
             deferred.resolve(req.responseText);
         } else {
             deferred.reject(new Error(req.statusText));
         }
     };
-    req.onerror = function () {
+    req.onerror = () => {
         deferred.reject(new Error(req.statusText));
     };
     req.send();
     return deferred.promise;
 }
+

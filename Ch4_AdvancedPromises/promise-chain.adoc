@@ -36,11 +36,11 @@ include::src/promise-chain/fs-method-chain.js[]
 
 [source,javascript]
 ----
-var File = require("./fs-method-chain");
-var inputFilePath = "input.txt",
-    outputFilePath = "output.txt";
+const File = require("./fs-method-chain");
+const inputFilePath = "input.txt";
+const outputFilePath = "output.txt";
 File.read(inputFilePath)
-    .transform(function (content) {
+    .transform((content) => {
         return ">>" + content;
     })
     .write(outputFilePath);
@@ -68,11 +68,11 @@ include::src/promise-chain/fs-promise-chain.js[]
 
 [source,javascript]
 ----
-var File = require("./fs-promise-chain");
-var inputFilePath = "input.txt",
-    outputFilePath = "output.txt";
+const File = require("./fs-promise-chain");
+const inputFilePath = "input.txt";
+const outputFilePath = "output.txt";
 File.read(inputFilePath)
-    .transform(function (content) {
+    .transform((content) => {
         return ">>" + content;
     })
     .write(outputFilePath);
@@ -85,20 +85,20 @@ File.read(inputFilePath)
 
 [source,javascript]
 ----
-var File = require("./fs-promise-chain");
+const File = require("./fs-promise-chain");
 File.read(inputFilePath)
-    .transform(function (content) {
+    .transform((content) => {
         return ">>" + content;
     })
     .write(outputFilePath);
 // => 擬似的に以下のような流れに展開できる
-promise.then(function read(){
-        return fs.readFileSync(filePath, "utf-8");
-    }).then(function transform(content) {
-         return ">>" + content;
-    }).then(function write(){
-        return fs.writeFileSync(filePath, data);
-    });
+promise.then(() => {
+    return fs.readFileSync(filePath, "utf-8");
+}).then((content) => {
+    return ">>" + content;
+}).then(() => {
+    return fs.writeFileSync(filePath, data);
+});
 ----
 
 `promise = promise.then(...)` という書き方は一見すると、上書きしているようにみえるため、
@@ -132,13 +132,13 @@ Promise版は<<promise-is-always-async,コラム: Promiseは常に非同期?>>�
 [source,javascript]
 .fs-promise-chainでのエラーハンドリング
 ----
-var File = require("./fs-promise-chain");
+const File = require("./fs-promise-chain");
 File.read(inputFilePath)
-    .transform(function (content) {
+    .transform((content) => {
         return ">>" + content;
     })
     .write(outputFilePath)
-    .catch(function(error){
+    .catch((error) => {
         console.error(error);
     });
 ----
@@ -181,26 +181,30 @@ JavaScriptでは動的にメソッドを定義することもできるため、
 自動的にPromise版を生成できないかということを考えると思います。
 (もちろん静的に定義する方が扱いやすいですが)
 
-そのような仕組みは<<es6-promises,ES6 Promises>>にはありませんが、
+そのような仕組みは<<es-promises,ES Promises>>にはありませんが、
 著名なサードパーティのPromise実装である https://github.com/petkaantonov/bluebird/[bluebird] などには
 https://github.com/petkaantonov/bluebird/blob/master/API.md#promisification[Promisification] という機能が用意されています。
+また、Node.jsのコアモジュールである``util``モジュールには、 https://nodejs.org/api/util.html#util_util_promisify_original[util.promisify] というAPIが用意されています。
 
-これを利用すると以下のように、その場でpromise版のメソッドを追加して利用できるようになります。
+これを利用すると以下のように、その場でPromise版のメソッドを作成して利用できるようになります。
 
 [source,javascript]
 ----
-var fs = Promise.promisifyAll(require("fs"));
+const fs = require("fs");
+const util = require("util");
+// コールバック版のAPIからPromise版を作成する
+const readFile = util.promisify(fs.readFile);
 
-fs.readFileAsync("myfile.js", "utf8").then(function(contents){
+readFile("myfile.js", "utf8").then((contents) => {
     console.log(contents);
-}).catch(function(e){
+}).catch((e) => {
     console.error(e.stack);
 });
 ----
 
 ==== ArrayのPromiseラッパー
 
-先ほどの https://github.com/petkaantonov/bluebird/blob/master/API.md#promisification[Promisification] が何をやっているのか少しイメージしにくいので、
+先ほどの``util.promisify``が何をやっているのか少しイメージしにくいので、
 次のようなネイティブ `Array` のPromise版となるメソッドを動的に定義する例を考えてみましょう。
 
 JavaScriptにはネイティブにもDOMやString等メソッドチェーンが行える機能が多くあります。
@@ -234,9 +238,10 @@ include::test/array-promise-chain-test.js[]
 
 [NOTE]
 ====
-先ほどの https://github.com/petkaantonov/bluebird/blob/master/API.md#promisification[Promisification] は
-Node.jsのCoreモジュールの非同期処理には `function(error,result){}` というように第一引数に `error` が来るというルールを利用して、
-自動的にPromiseでラップしたメソッドを生成しています
+先ほどの  https://nodejs.org/api/util.html#util_util_promisify_original[util.promisify] は、
+Node.jsのCoreモジュールの非同期処理には `function(error, result){}` というように第一引数に `error` が来るというルール（エラーファーストコールバック）を利用して、自動的にPromiseでラップしたメソッドを生成しています。
+
+また、Node.js 10からは ``fs`` モジュールに https://nodejs.org/api/fs.html#fs_fs_promises_api[Promise版のAPI] が追加されています。
 ====
 
 === まとめ
@@ -248,7 +253,7 @@ Node.jsのCoreモジュールの非同期処理には `function(error,result){}`
 * Promisification
 * 統一的なインターフェースの再利用
 
-<<es6-promises,ES6 Promises>>はCoreとなる機能しか用意されていません。
+<<es-promises,ES Promises>>はCoreとなる機能しか用意されていません。
 そのため、自分でPromiseを使った既存の機能のラッパー的な実装をすることがあるかもしれません。
 
 しかし、何度もコールバックを呼ぶEventのような処理がPromiseには不向きなように、

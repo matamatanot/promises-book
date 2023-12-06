@@ -23,7 +23,7 @@
 
 [source,javascript]
 ----
-promise.then(failTest, function(error){
+promise.then(failTest, (error) => {
     // assertでerrorをテストする
     assert(error instanceof Error);
 });
@@ -69,12 +69,12 @@ include::embed/embed-shouldRejected-test.js[]
 
 [source,javascript]
 ----
-promise.then(failTest, function(error){
-    assert(error.message === 'human error');
+promise.then(failTest, (error) => {
+    assert(error.message === "human error");
 });
 // == ほぼ同様の意味
-shouldRejected(promise).catch(function (error) {
-    assert(error.message === 'human error');
+shouldRejected(promise).catch((error) => {
+    assert(error.message === "human error");
 });
 ----
 
@@ -103,6 +103,9 @@ Promiseで意図したテストを書くためにはどうするか、またそ�
 今回書いた `shouldFulfilled` と `shouldRejected` はライブラリとして利用できるようになっています。
 
 https://github.com/azu/promise-test-helper[azu/promise-test-helper] からダウンロードすることができます。
+
+また、Node.js 10.0.0から ``assert.rejects`` と ``assert.doesNotReject`` というよく似た趣旨のassertionが提供されています。
+詳細は、 https://nodejs.org/api/assert.html[Node.jsのAPIドキュメント]を参照してください。
 ====
 
 また、今回のヘルパー関数は<<mocha-promise,MochaのPromiseサポート>>を前提とした書き方なので、

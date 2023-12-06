@@ -6,6 +6,20 @@
 改めて説明すると<<promise.catch,Promise#catch>>は `promise.then(undefined, onRejected);` のエイリアスとなるメソッドです。
 つまり、promiseオブジェクトがRejectedとなった時に呼ばれる関数を登録するためのメソッドです。
 
+次のコードのように ``Promise#catch`` は ``Promise#then`` でのエラーハンドリングだけを簡潔に書くためのメソッドです。
+
+[source,javascript]
+.Promise#catchとPromise#then
+----
+Promise.reject(new Error("message")).catch((error) => {
+    // エラーハンドリング
+});
+// Promise#catchは次のPromise#thenと同じ意味
+Promise.reject(new Error("message")).then(undefined, (error) => {
+    // エラーハンドリング
+});
+----
+
 [NOTE]
 <<promise.then,Promise#then>>と<<promise.catch,Promise#catch>>の使い分けについては、
 <<then-or-catch,then or catch?>>で紹介しています。
@@ -26,8 +40,8 @@ polyfillとはその機能が実装されていないブラウザでも、その
 [source,javascript]
 .Promise#catchの実行結果
 ----
-var promise = Promise.reject(new Error("message"));
-promise.catch(function (error) {
+const promise = Promise.reject(new Error("message"));
+promise.catch((error) => {
     console.error(error);
 });
 ----
@@ -63,8 +77,8 @@ https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Propert
 [source,javascript]
 .Promise#catchの識別子エラーの回避
 ----
-var promise = Promise.reject(new Error("message"));
-promise["catch"](function (error) {
+const promise = Promise.reject(new Error("message"));
+promise["catch"]((error) => {
     console.error(error);
 });
 ----
@@ -75,8 +89,8 @@ promise["catch"](function (error) {
 [source,javascript]
 .Promise#catchではなくPromise#thenを使う
 ----
-var promise = Promise.reject(new Error("message"));
-promise.then(undefined, function (error) {
+const promise = Promise.reject(new Error("message"));
+promise.then(undefined, (error) => {
     console.error(error);
 });
 ----

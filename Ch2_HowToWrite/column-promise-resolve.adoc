@@ -9,11 +9,11 @@ promiseオブジェクトがすぐにresolveされるので、`.then` に登録�
 [role="executable"]
 [source,javascript]
 ----
-var promise = new Promise(function (resolve){
+const promise = new Promise((resolve) => {
     console.log("inner promise"); // 1
     resolve(42);
 });
-promise.then(function(value){
+promise.then((value) => {
     console.log(value); // 3
 });
 console.log("outer promise"); // 2
@@ -28,7 +28,7 @@ outer promise // 2
 ----
 
 JavaScriptは上から実行されていくため、まず最初に `<1>` が実行されますね。
-そして次に `resolve(42);` が実行され、この `promise` オブジェクトはこの時点で `42` という値にFulFilledされます。
+そして次に `resolve(42);` が実行され、この `promise` オブジェクトはこの時点で `42` という値にFulfilledされます。
 
 次に、`promise.then` で `<3>` のコールバック関数を登録しますが、ここがこのコラムの焦点です。
 
@@ -71,7 +71,7 @@ onReadyを呼ぶ前にDOMの読み込みが完了していない::
 そのため、このコードは配置する場所によって、
 コンソールに出てくるメッセージの順番が変わってしまいます。
 
-この問題の対処法として常に非同期で呼び出すように統一することです。
+この問題の対処法は、常に非同期で呼び出すように統一することです。
 
 [role="executable"]
 [source,javascript]

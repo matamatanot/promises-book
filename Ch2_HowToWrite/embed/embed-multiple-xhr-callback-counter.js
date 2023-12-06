@@ -1,42 +1,44 @@
-function getURLCallback(URL, callback) {
-    var req = new XMLHttpRequest();
-    req.open('GET', URL, true);
-    req.onload = function () {
-        if (req.status === 200) {
+function fetchURLCallback(URL, callback) {
+    const req = new XMLHttpRequest();
+    req.open("GET", URL, true);
+    req.onload = () => {
+        if (200 <= req.status && req.status < 300) {
             callback(null, req.responseText);
         } else {
             callback(new Error(req.statusText), req.response);
         }
     };
-    req.onerror = function () {
+    req.onerror = () => {
         callback(new Error(req.statusText));
     };
     req.send();
 }
+
 function parse(callback, error, value) {
     if (error) {
         callback(error, value);
     } else {
         try {
-            var result = JSON.parse(value);
+            const result = JSON.parse(value);
             callback(null, result);
         } catch (e) {
             callback(e, value);
         }
     }
 }
-var request = {
-        comment: function getComment(callback) {
-            return getURLCallback('http://azu.github.io/promises-book/json/comment.json', parse.bind(null, callback));
-        },
-        people: function getPeople(callback) {
-            return getURLCallback('http://azu.github.io/promises-book/json/people.json', parse.bind(null, callback));
-        }
-    };
+const request = {
+    comment: function fetchComment(callback) {
+        return fetchURLCallback("https://azu.github.io/promises-book/json/comment.json", parse.bind(null, callback));
+    },
+    people: function fetchPeople(callback) {
+        return fetchURLCallback("https://azu.github.io/promises-book/json/people.json", parse.bind(null, callback));
+    }
+};
 function main(callback) {
     function requester(requests, callback) {
-        var results = [];
-        var requestLength = results.length;
+        const results = [];
+        const requestLength = results.length;
+
         function handler(error, value) {
             if (error) {
                 return callback(error, value);
@@ -46,10 +48,15 @@ function main(callback) {
                 callback(null, results);
             }
         }
-        for (var i = 0; i < requests.length; i++) {
-            var req = requests[i];
+
+        for (let i = 0; i < requests.length; i++) {
+            const req = requests[i];
             req(handler);
         }
     }
+
     requester([request.comment, request.people], callback);
 }
+
+
+

@@ -71,7 +71,7 @@ image::img/javascript-console-editor.png[コンソールエディタの図]
 
 サンプルコードはNode.js上で動くものとして作り、Node.jsで動くテストを書いた。
 
-<<es6-promises,ES6 Promises>>はDOMではなくECMAScriptの仕様であるため、
+<<es-promises,ES6 Promises>>はDOMではなくECMAScriptの仕様であるため、
 ブラウザが実行環境ではなくてもよいという考えと、実行の手軽さからNode.js上で動くものとして書いていった。
 
 しかし一部を除いて、表示用コードはブラウザでの表示と実行を前提としている。
@@ -106,14 +106,14 @@ Node.jsでも `XMLHttpRequest` と同じインターフェイスで通信をす�
 
 [source,javascript]
 ----
-global.XMLHttpRequest = require('w3c-xmlhttprequest').XMLHttpRequest;
+global.XMLHttpRequest = require("w3c-xmlhttprequest").XMLHttpRequest;
 ----
 
 [NOTE]
 ====
 詳細は以下で紹介されている
 
-* http://azu.github.io/slide/hasakurajs/[Test Runner Tips]
+* https://azu.github.io/slide/hasakurajs/[Test Runner Tips]
 ====
 
 ===== Web Notifications API
@@ -163,7 +163,7 @@ Asciidoctorではリソースが欠損しててもエラーではなくWARNING�
 ==== プレビュー
 
 masterへマージされたものは、Travis CIで自動的にビルドして `gh-pages` ブランチにpushする。
-これによりmasterへのコミットやpull-requestsをマージしたら自動的に http://azu.github.io/promises-book/ にて見られるようにしていた。
+これによりmasterへのコミットやpull-requestsをマージしたら自動的に https://azu.github.io/promises-book/ にて見られるようにしていた。
 
 - https://github.com/azu/promises-book/blob/master/_tools/deploy-gh-pages.sh[promises-book/_tools/deploy-gh-pages.sh at master · azu/promises-book]
 

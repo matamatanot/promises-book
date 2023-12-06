@@ -1,42 +1,45 @@
-function getURL(URL) {
-    return new Promise(function (resolve, reject) {
-        var req = new XMLHttpRequest();
-        req.open('GET', URL, true);
-        req.onload = function () {
-            if (req.status === 200) {
+function fetchURL(URL) {
+    return new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest();
+        req.open("GET", URL, true);
+        req.onload = () => {
+            if (200 <= req.status && req.status < 300) {
                 resolve(req.responseText);
             } else {
                 reject(new Error(req.statusText));
             }
         };
-        req.onerror = function () {
+        req.onerror = () => {
             reject(new Error(req.statusText));
         };
         req.send();
     });
 }
-var request = {
-        comment: function getComment() {
-            return getURL('http://azu.github.io/promises-book/json/comment.json').then(JSON.parse);
-        },
-        people: function getPeople() {
-            return getURL('http://azu.github.io/promises-book/json/people.json').then(JSON.parse);
-        }
-    };
+const request = {
+    comment() {
+        return fetchURL("https://azu.github.io/promises-book/json/comment.json").then(JSON.parse);
+    },
+    people() {
+        return fetchURL("https://azu.github.io/promises-book/json/people.json").then(JSON.parse);
+    }
+};
 function main() {
     function recordValue(results, value) {
         results.push(value);
         return results;
     }
+
     // [] は記録する初期値を部分適用してる
-    var pushValue = recordValue.bind(null, []);
+    const pushValue = recordValue.bind(null, []);
     // promiseオブジェクトを返す関数の配列
-    var tasks = [request.comment, request.people];
-    var promise = Promise.resolve();
-    // スタート地点
-    for (var i = 0; i < tasks.length; i++) {
-        var task = tasks[i];
+    const tasks = [request.comment, request.people];
+    let promise = Promise.resolve();// スタート地点
+    for (let i = 0; i < tasks.length; i++) {
+        const task = tasks[i];
         promise = promise.then(task).then(pushValue);
     }
     return promise;
 }
+
+
+

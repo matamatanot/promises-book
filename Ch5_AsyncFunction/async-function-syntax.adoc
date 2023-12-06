@@ -1,35 +1,34 @@
-[async-function-syntax]
+[[async-function-syntax]]
 == Async Functionの構文
 
 Async Functionは関数の定義に``async``キーワードをつけることで定義できます。
 JavaScriptの関数定義には関数宣言や関数式、Arrow Function、メソッドの短縮記法などがあります。
 どの定義方法でも``async``キーワードを前につけるだけでAsync Functionとして定義できます。
 
-[role="executable"]
 [source,javascript]
 ----
 // 関数宣言のAsync Function版
-async function fn1(){}
+async function fn1() {}
 // 関数式のAsync Function版
-const fn2 = async function(){};
+const fn2 = async function() {};
 // Arrow FunctionのAsync Function版
 const fn3 = async() => {};
 // メソッドの短縮記法のAsync Function版
-const object = { 
-    async method(){}
+const object = {
+    async method() {}
 };
 ----
 
-これらのAsync Functionは、次の事以外は通常の関数と同じ性質を持ちます。
+これらのAsync Functionは、次のこと以外は通常の関数と同じ性質を持ちます。
 
 - Async Functionは必ずPromiseを返す
 - Async Function内では``await``式が利用できる
 
-[#async-function-return-promise]
+[[async-function-return-promise]]
 === Async FunctionはPromiseを返す
 
 Async Functionとして定義した関数は必ず``Promise``インスタンスを返します。
-返される`Promise`インスタンスの状態は関数の返り値によって異なり、次の3つのケースが考えられます。
+返される``Promise``インスタンスの状態は関数の返り値によって異なり、次の3つのケースが考えられます。
 
 1. Async FunctionはPromise以外の値をreturnした場合、その返り値をもつ**Fulfilled**なPromiseを返す
 2. Async FunctionがPromiseをreturnした場合、その返り値のPromiseをそのまま返す
@@ -40,7 +39,7 @@ Async Functionとして定義した関数は必ず``Promise``インスタンス�
 具体的な例を順番に見ていきます。
 
 まず、Async FunctionはPromise以外の値をreturnした場合、その返り値で解決される**Fulfilled**なPromiseを返します。
-これは、返した値が``Promise.resolve``されているのとほとんど感覚です。
+これは、返した値が``Promise.resolve``されているのとほとんど同じ感覚です。
 
 [role="executable"]
 [source,javascript]
@@ -49,14 +48,14 @@ Async Functionとして定義した関数は必ず``Promise``インスタンス�
 async function resolveUndefined() {
     // 何も値を返さない場合は`undefined`を返すのと同じ
 }
-resolveUndefined().then(function(value){
+resolveUndefined().then((value) => {
     console.log(value); // => undefined
 });
 // `Promise.resolve("値")`を返したのと同じ
 async function resolveFn() {
     return "値";
 }
-resolveFn().then(function(value){
+resolveFn().then((value) => {
     console.log(value); // => "値"
 });
 ----
@@ -72,7 +71,7 @@ resolveFn().then(function(value){
 async function resolveFn() {
     return Promise.resolve("値");
 }
-resolveFn().then(function(value){
+resolveFn().then((value) => {
     console.log(value); // => "値"
 });
 
@@ -80,7 +79,7 @@ resolveFn().then(function(value){
 async function rejectFn() {
     return Promise.reject(new Error("エラーメッセージ"));
 }
-rejectFn().catch(function(error){
+rejectFn().catch((error) => {
     console.log(error.message); // => "エラーメッセージ"
 });
 ----
@@ -98,7 +97,7 @@ async function exceptionFn() {
 }
 
 // Async Functionで例外が発生するとRejectedなPromiseが返される
-exceptionFn().catch(function(error){
+exceptionFn().catch((error) => {
     console.log(error.message); // => "例外が発生しました"
 });
 ----

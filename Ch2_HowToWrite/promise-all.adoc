@@ -6,9 +6,9 @@
 
 先ほどの複数のXHRの結果をまとめて取得する処理は、 <<Promise.all, `Promise.all`>> を使うとシンプルに書くことができます。
 
-先ほどの例の `getURL` はXHRによる通信を抽象化したpromiseオブジェクトを返しています。
+先ほどの例の `fetchURL` はXHRによる通信を抽象化したpromiseオブジェクトを返しています。
 `Promise.all` に通信を抽象化したpromiseオブジェクトの配列を渡すことで、
-全ての通信が完了(FulFilledまたはRejected)した時に、次の `.then` を呼び出すことができます。
+全ての通信が完了(FulfilledまたはRejected)した時に、次の `.then` を呼び出すことができます。
 
 [role="executable"]
 [source,javascript]
@@ -17,9 +17,9 @@
 ----
 include::embed/embed-promise-all-xhr.js[]
 // 実行例
-main().then(function (value) {
+main().then((value) => {
     console.log(value);
-}).catch(function(error){
+}).catch((error) => {
     console.error(error);
 });
 ----
@@ -40,7 +40,7 @@ Promise.all([request.comment(), request.people()]);
 
 [source,javascript]
 ----
-main().then(function (results) {
+main().then((results) => {
     console.log(results); // [comment, people]の順番
 });
 ----
@@ -56,14 +56,14 @@ main().then(function (results) {
 include::embed/embed-promise-all-timer.js[]
 ----
 
-`timerPromisefy` は引数で指定したミリ秒後に、その指定した値でFulFilledとなる
+`timerPromisefy` は引数で指定したミリ秒後に、その指定した値でFulfilledとなる
 promiseオブジェクトを返してくれます。
 
 `Promise.all` に渡してるのは、それを複数作り配列にしたものですね。
 
 [source,javascript]
 ----
-var promises = [
+const promises = [
     timerPromisefy(1),
     timerPromisefy(32),
     timerPromisefy(64),

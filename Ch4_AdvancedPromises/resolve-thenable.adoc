@@ -13,7 +13,7 @@ https://developer.mozilla.org/ja/docs/Web/API/notification[Web Notifications]と
 Web Notifications APIについて詳しくは以下を参照して下さい。
 
 * https://developer.mozilla.org/ja/docs/WebAPI/Using_Web_Notifications[Web Notifications の使用 - WebAPI | MDN]
-* http://caniuse.com/notifications[Can I use Web Notifications]
+* https://caniuse.com/notifications[Can I use Web Notifications]
 
 Web Notifications APIについて簡単に解説すると、以下のように `new Notification` をすることで通知メッセージが表示できます。
 
@@ -40,7 +40,7 @@ Firefoxだと許可、不許可に加えて __永続__ か __セッション限�
 [role="executable"]
 [source,javascript]
 ----
-Notification.requestPermission(function (status) {
+Notification.requestPermission((status) => {
     // statusに"granted" or "denied"が入る
     console.log(status);
 });
@@ -99,7 +99,7 @@ notifyMessage("Hi!", {}, function (error, notification) {
 [source,javascript]
 .コールバック関数はエラーとnotificationオブジェクトを受け取る
 ----
-function callback(error, notification){
+function callback(error, notification) {
 
 }
 ----
@@ -113,7 +113,7 @@ https://notifications.spec.whatwg.org/[Notifications API]の最新仕様では�
 そのため、ここから先の話は最新の仕様ではもっとシンプルに書ける可能性があります。
 
 しかし、古いNotification APIの仕様では、コールバック関数のみしか扱う方法がありませんでした。
-ここではコールバック関数のみしか扱えるNotification APIを前提にしています。
+ここではコールバック関数のみしか扱えないNotification APIを前提にしています。
 ====
 
 
@@ -131,7 +131,7 @@ include::embed/embed-notification-as-promise.js[]
 // 実行例
 notifyMessageAsPromise("Hi!").then(function (notification) {
     console.log(notification);// 通知のオブジェクト
-}).catch(function(error){
+}).catch((error) => {
     console.error(error);
 });
 ----
@@ -195,7 +195,7 @@ include::embed/embed-notification-thenable.js[]
 // 実行例
 Promise.resolve(notifyMessageAsThenable("message")).then(function (notification) {
     console.log(notification);// 通知のオブジェクト
-}).catch(function(error){
+}).catch((error) => {
     console.error(error);
 });
 ----
@@ -213,9 +213,9 @@ Promiseとして利用していることが分かりますね。
 
 [source,javascript]
 ----
-Promise.resolve(notifyMessageAsThenable("message")).then(function (notification) {
+Promise.resolve(notifyMessageAsThenable("message")).then((notification) => {
     console.log(notification);// 通知のオブジェクト
-}).catch(function(error){
+}).catch((error) => {
     console.error(error);
 });
 ----
@@ -267,24 +267,24 @@ promiseオブジェクトを返す関数を公開APIとしても問題ないと�
 恐らく、一番多く使われている所は<<promise-library,Promiseのライブラリ>>間での相互変換でしょう。
 
 たとえば、 QライブラリのPromiseのインスタンスであるQ promiseオブジェクトは、
-<<es6-promises,ES6 Promises>>のpromiseオブジェクトが持っていないメソッドを持っています。
+<<es-promises,ES Promises>>のpromiseオブジェクトが持っていないメソッドを持っています。
 Q promiseオブジェクトには `promise.finally(callback)` や `promise.nodeify(callback)` などのメソッドが用意されてます。
 
-ES6 PromisesのpromiseオブジェクトをQ promiseオブジェクトに変換するときに使われるのが、
+ES PromisesのpromiseオブジェクトをQ promiseオブジェクトに変換するときに使われるのが、
 まさにこのThenableです。
 
 [source,javascript]
 .thenableを使ってQ promiseオブジェクトにする
 ----
-var Q = require("Q");
-// このpromiseオブジェクトはES6のもの
-var promise = new Promise(function(resolve){
+const Q = require("Q");
+// このpromiseオブジェクトはESのもの
+const promise = new Promise((resolve) => {
     resolve(1);
 });
 // Q promiseオブジェクトに変換する
-Q(promise).then(function(value){
+Q(promise).then((value) => {
     console.log(value);
-}).finally(function(){ // <1>
+}).finally(() => { // <1>
     console.log("finally");
 });
 ----

@@ -1,5 +1,4 @@
-function throwError(value) {
-    // 例外を投げる
+function throwError(value) { // 例外を投げる
     throw new Error(value);
 }
 // <1> onRejectedが呼ばれることはない
@@ -10,3 +9,6 @@ function badMain(onRejected) {
 function goodMain(onRejected) {
     return Promise.resolve(42).then(throwError).catch(onRejected);
 }
+
+
+

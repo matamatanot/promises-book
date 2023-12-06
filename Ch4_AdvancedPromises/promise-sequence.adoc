@@ -21,9 +21,9 @@ Aの処理 が終わったら Bの処理 というような逐次的な処理を
 ----
 include::../Ch2_HowToWrite/embed/embed-multiple-xhr.js[]
 // 実行例
-main().then(function (value) {
+main().then((value) => {
     console.log(value);
-}).catch(function(error){
+}).catch((error) => {
     console.error(error);
 });
 ----
@@ -40,9 +40,9 @@ main().then(function (value) {
 ----
 include::embed/embed-promise-foreach-xhr.js[]
 // 実行例
-main().then(function (value) {
+main().then((value) => {
     console.log(value);
-}).catch(function(error){
+}).catch((error) => {
     console.error(error);
 });
 ----
@@ -69,9 +69,9 @@ forループで書く場合、<<then-return-new-promise,コラム: thenは常に
 ----
 include::embed/embed-promise-reduce-xhr.js[]
 // 実行例
-main().then(function (value) {
+main().then((value) => {
     console.log(value);
-}).catch(function(error){
+}).catch((error) => {
     console.error(error);
 });
 ----
@@ -91,7 +91,7 @@ forループの場合と同じように<<promise-chain, Promise chain>>を繋げ
 `Array.prototype.reduce` については詳しくは以下を参照して下さい。
 
 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce[Array.prototype.reduce() - JavaScript | MDN]
-* http://azu.github.io/slide/JSGohan/reduce.html[Array.prototype.reduce Dance]
+* https://azu.github.io/slide/JSGohan/reduce.html[Array.prototype.reduce Dance]
 =====
 
 forループと異なる点は、一時変数としての `promise` が不要になることに伴い、
@@ -107,7 +107,7 @@ forループと異なる点は、一時変数としての `promise` が不要に
 
 [source,javascript]
 ----
-var tasks = [request.comment, request.people];
+const tasks = [request.comment, request.people];
 sequenceTasks(tasks);
 ----
 
@@ -139,9 +139,9 @@ promiseオブジェクトを作った段階ですでにXHRが実行されてい�
 ----
 include::embed/embed-promise-sequence-xhr.js[]
 // 実行例
-main().then(function (value) {
+main().then((value) => {
     console.log(value);
-}).catch(function(error){
+}).catch((error) => {
     console.error(error);
 });
 ----
@@ -154,6 +154,8 @@ main().then(function (value) {
 * <<promise-foreach-xhr.js, forループを使った書き方>>
 * <<promise-reduce-xhr.js, reduceを使った書き方>>
 * <<promise-sequence.js, 逐次処理する関数を分けた書き方>>
+
+さらに、ここではまだ紹介していませんが、<<chapter5-async-function, Async Function>>を使う方法もあります。
 
 しかし、これはJavaScriptで配列を扱うのにforループや `forEach` 等、色々やり方があるのと本質的には違いはありません。
 そのため、Promiseを扱う場合も処理をまとめられるところは小さく関数に分けて、実装していくのがいいといえるでしょう。
